@@ -4,7 +4,7 @@ import { initializeApp } from "firebase/app";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyBG_IvXBWYQTdthtFizqsWS6m0SAo5HFt0",
   authDomain: "faidatelaprenotazioni.firebaseapp.com",
   databaseURL: "https://faidatelaprenotazioni-default-rtdb.europe-west1.firebasedatabase.app",
