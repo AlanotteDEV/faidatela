@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fai da Tela — Richieste Ordine</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;500;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f0e8d8;
+      min-height: 100vh;
+      font-family: 'Nunito', sans-serif;
+      color: #2c1f10;
+      padding-bottom: 3rem;
+    }
+
+    /* ============ HERO / HEADER (comune) ============ */
+    .fdt-hero {
+      background: #e8dcc8;
+      border-bottom: 2px solid #c4a882;
+      padding: 2.5rem 1.5rem 2rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .fdt-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 3.2rem;
+      font-weight: 700;
+      color: #1a1008;
+      letter-spacing: 0.04em;
+      line-height: 1;
+      user-select: none;
+    }
+
+    .fdt-tagline {
+      font-family: 'Caveat', cursive;
+      font-size: 1rem;
+      color: #7a5c38;
+      margin: 0.3rem 0 0;
+      letter-spacing: 0.08em;
+    }
+
+    .fdt-divider {
+      width: 80px;
+      height: 2px;
+      background: #8b5e2a;
+      margin: 1rem auto 0;
+    }
+
+    .fdt-logout-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: none;
+      border: 1.5px solid #c4a882;
+      color: #7a5c38;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.8rem;
+      padding: 5px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fdt-logout-btn:hover { border-color: #8b5e2a; color: #5c3d1a; }
+
+    .fdt-back-btn {
+      position: absolute;
+      top: 1.2rem;
+      left: 1.2rem;
+      background: none;
+      border: 1.5px solid #c4a882;
+      color: #7a5c38;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.8rem;
+      padding: 5px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fdt-back-btn:hover { border-color: #8b5e2a; color: #5c3d1a; }
+
+    /* ============ SECTION TITLES / CARDS (comune) ============ */
+    .fdt-section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #7a5c38;
+      margin: 0 0 1.2rem;
+      text-transform: uppercase;
+    }
+
+    .fdt-card {
+      background: #faf4e8;
+      border: 1.5px solid #c4a882;
+      border-radius: 4px;
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+
+    .fdt-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: #8b5e2a;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .fdt-field { margin-bottom: 1.2rem; }
+    .fdt-field:last-child { margin-bottom: 0; }
+
+    .fdt-label {
+      display: block;
+      font-family: 'Caveat', cursive;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #5c3d1a;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.06em;
+    }
+
+    .fdt-label .req { color: #b84c1e; margin-left: 3px; }
+
+    .fdt-input {
+      width: 100%;
+      background: #fffdf5;
+      border: 1.5px solid #c4a882;
+      border-radius: 3px;
+      color: #1a1008;
+      font-size: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      padding: 0.6rem 0.85rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .fdt-input:focus { border-color: #8b5e2a; }
+    .fdt-input::placeholder { color: #b8a080; }
+
+    textarea.fdt-input {
+      resize: vertical;
+      min-height: 90px;
+    }
+
+    .fdt-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .fdt-btn {
+      width: 100%;
+      background: #5c3d1a;
+      color: #faf4e8;
+      border: none;
+      border-radius: 3px;
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+      margin-top: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .fdt-btn:hover { background: #3d2810; }
+    .fdt-btn:active { transform: scale(0.99); }
+    .fdt-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* ============ VISTA PUBBLICA (form ordine) ============ */
+    .fdt-form-wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem 0;
+    }
+
+    .fdt-upload-area {
+      border: 2px dashed #c4a882;
+      border-radius: 4px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      background: #fffdf5;
+      position: relative;
+    }
+
+    .fdt-upload-area:hover {
+      border-color: #8b5e2a;
+      background: #faf4e8;
+    }
+
+    .fdt-upload-area input[type=file] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .fdt-upload-icon { font-size: 1.8rem; color: #b8a080; margin-bottom: 0.4rem; }
+
+    .fdt-upload-text {
+      font-family: 'Caveat', cursive;
+      font-size: 0.95rem;
+      color: #a08060;
+    }
+
+    .fdt-upload-text span { color: #8b5e2a; font-weight: 600; }
+
+    .fdt-preview-img {
+      display: none;
+      max-width: 100%;
+      max-height: 200px;
+      border-radius: 3px;
+      margin-top: 0.75rem;
+      border: 1.5px solid #c4a882;
+    }
+
+    .fdt-spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(250,244,232,0.4);
+      border-top-color: #faf4e8;
+      border-radius: 50%;
+      animation: fdt-spin 0.7s linear infinite;
+    }
+
+    @keyframes fdt-spin { to { transform: rotate(360deg); } }
+
+    .fdt-success, .fdt-error {
+      display: none;
+      background: #faf4e8;
+      border: 1.5px solid #8b5e2a;
+      border-radius: 4px;
+      padding: 2rem;
+      text-align: center;
+      margin-top: 1.5rem;
+    }
+
+    .fdt-error { border-color: #b84c1e; }
+
+    .fdt-success-icon { font-size: 2rem; color: #5c8a2a; margin-bottom: 0.5rem; }
+    .fdt-error-icon { font-size: 2rem; color: #b84c1e; margin-bottom: 0.5rem; }
+
+    .fdt-success-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #1a1008;
+      margin: 0 0 0.3rem;
+    }
+
+    .fdt-success-sub { font-size: 0.85rem; color: #7a5c38; }
+
+    .fdt-footer-note {
+      max-width: 600px;
+      margin: 1.5rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #a08060;
+    }
+
+    /* ============ VISTA ADMIN (login + dashboard) ============ */
+    .fdt-login-wrap {
+      max-width: 380px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .fdt-login-error {
+      display: none;
+      color: #b84c1e;
+      font-size: 0.82rem;
+      text-align: center;
+      margin-top: 0.8rem;
+    }
+
+    .fdt-dash { display: none; }
+
+    .fdt-toolbar {
+      max-width: 800px;
+      margin: 1.5rem auto 0;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .fdt-badge {
+      background: #5c3d1a;
+      color: #faf4e8;
+      font-family: 'Caveat', cursive;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 2px;
+    }
+
+    .fdt-search {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .fdt-search input {
+      width: 100%;
+      background: #fffdf5;
+      border: 1.5px solid #c4a882;
+      border-radius: 3px;
+      padding: 0.5rem 0.8rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+    }
+    .fdt-search input:focus { border-color: #8b5e2a; }
+
+    .fdt-orders-wrap {
+      max-width: 800px;
+      margin: 1.2rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .fdt-order-item {
+      background: #faf4e8;
+      border: 1.5px solid #c4a882;
+      border-left: 4px solid #8b5e2a;
+      border-radius: 0 4px 4px 0;
+      padding: 1.1rem 1.3rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .fdt-order-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .fdt-order-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a1008;
+    }
+
+    .fdt-order-time { font-size: 0.72rem; color: #a08060; white-space: nowrap; margin-top: 3px; }
+
+    .fdt-order-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3rem 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .fdt-order-card {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #5c3d1a;
+    }
+
+    .fdt-order-exp, .fdt-order-ig { font-size: 0.85rem; color: #7a5c38; }
+
+    .fdt-order-note {
+      font-family: 'Caveat', cursive;
+      font-size: 0.95rem;
+      color: #6e5436;
+      margin-top: 0.5rem;
+      border-top: 1px solid #d8c8a8;
+      padding-top: 0.4rem;
+    }
+
+    .fdt-order-img {
+      max-width: 130px;
+      max-height: 130px;
+      border-radius: 3px;
+      margin-top: 0.5rem;
+      border: 1.5px solid #c4a882;
+      cursor: zoom-in;
+      display: block;
+    }
+
+    .fdt-order-actions {
+      margin-top: 0.6rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .fdt-del-btn {
+      background: none;
+      border: 1.5px solid #c4a882;
+      color: #b84c1e;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .fdt-del-btn:hover { border-color: #b84c1e; background: #fdf0ea; }
+
+    .fdt-empty {
+      text-align: center;
+      color: #b8a080;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      padding: 2.5rem 0;
+      border: 1.5px dashed #c4a882;
+      border-radius: 4px;
+      background: #faf4e8;
+    }
+
+    .fdt-loading {
+      text-align: center;
+      color: #a08060;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      padding: 2rem 0;
+    }
+
+    /* Lightbox immagine */
+    .fdt-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,12,4,0.85);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+    .fdt-lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 4px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    /* ============ VISIBILITÀ VISTE ============ */
+    #vista-pubblica { display: block; }
+    #vista-admin { display: none; }
+
+    @media (max-width: 480px) {
+      .fdt-row { grid-template-columns: 1fr; }
+      .fdt-brand { font-size: 2.4rem; }
+      .fdt-order-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="fdt-hero">
+    <h1 class="fdt-brand" id="titolo-segreto" style="cursor: default;">Fai da Tela</h1>
+    <p class="fdt-tagline" id="tagline">tattoo · custom art · richieste ordine</p>
+    <div class="fdt-divider"></div>
+    <button class="fdt-back-btn" id="back-btn" onclick="tornaAlForm()">
+      <i class="ti ti-arrow-left"></i> Torna al form
+    </button>
+    <button class="fdt-logout-btn" id="logout-btn" onclick="doLogout()">
+      <i class="ti ti-logout"></i> Esci
+    </button>
+  </div>
+
+  <!-- ============ VISTA PUBBLICA: FORM RICHIESTA ORDINE ============ -->
+  <div id="vista-pubblica">
+    <div class="fdt-form-wrap">
+      <div class="fdt-card">
+        <p class="fdt-section-title">Chi sei</p>
+        <div class="fdt-row">
+          <div class="fdt-field">
+            <label class="fdt-label">Nome <span class="req">*</span></label>
+            <input id="f-nome" class="fdt-input" type="text" placeholder="Es. Marco">
+          </div>
+          <div class="fdt-field">
+            <label class="fdt-label">Cognome</label>
+            <input id="f-cognome" class="fdt-input" type="text" placeholder="Es. Rossi">
+          </div>
+        </div>
+        <div class="fdt-field">
+          <label class="fdt-label">Instagram / Contatto</label>
+          <input id="f-ig" class="fdt-input" type="text" placeholder="@username o numero">
+        </div>
+      </div>
+
+      <div class="fdt-card">
+        <p class="fdt-section-title">La tua richiesta</p>
+        <div class="fdt-field">
+          <label class="fdt-label">Nome della carta <span class="req">*</span></label>
+          <input id="f-carta" class="fdt-input" type="text" placeholder="Es. La Luna, Il Sole, La Giustizia...">
+        </div>
+        <div class="fdt-field">
+          <label class="fdt-label">Espansione / Mazzo <span class="req">*</span></label>
+          <input id="f-espansione" class="fdt-input" type="text" placeholder="Es. Tarocchi Rider-Waite, MTG, custom...">
+        </div>
+        <div class="fdt-field">
+          <label class="fdt-label">Note aggiuntive</label>
+          <textarea id="f-note" class="fdt-input" placeholder="Stile, posizione, dimensioni o qualsiasi dettaglio..."></textarea>
+        </div>
+      </div>
+
+      <div class="fdt-card">
+        <p class="fdt-section-title">Immagine di riferimento</p>
+        <div class="fdt-field">
+          <div class="fdt-upload-area">
+            <input type="file" accept="image/*" id="f-img" onchange="handleImg(event)">
+            <div class="fdt-upload-icon"><i class="ti ti-photo-up"></i></div>
+            <p class="fdt-upload-text"><span>Clicca per caricare</span> o trascina qui<br>PNG, JPG, WEBP</p>
+          </div>
+          <img id="img-preview" class="fdt-preview-img" alt="Anteprima">
+        </div>
+      </div>
+
+      <button class="fdt-btn" id="submit-btn" onclick="submitOrder()">
+        <span class="fdt-spinner" id="btn-spinner"></span>
+        <i class="ti ti-send" id="btn-icon"></i> <span id="btn-text">Invia richiesta</span>
+      </button>
+
+      <div class="fdt-success" id="success-box">
+        <div class="fdt-success-icon"><i class="ti ti-check"></i></div>
+        <p class="fdt-success-title">Richiesta ricevuta!</p>
+        <p class="fdt-success-sub">Ti contatteremo presto per i dettagli del tuo progetto.</p>
+      </div>
+
+      <div class="fdt-error" id="error-box">
+        <div class="fdt-error-icon"><i class="ti ti-alert-triangle"></i></div>
+        <p class="fdt-success-title">Ops, qualcosa è andato storto</p>
+        <p class="fdt-success-sub" id="error-text">Riprova tra qualche istante.</p>
+      </div>
+    </div>
+
+    <p class="fdt-footer-note">I tuoi dati vengono inviati in modo sicuro e sono visibili solo allo staff di Fai da Tela.</p>
+  </div>
+
+  <!-- ============ VISTA ADMIN: LOGIN + DASHBOARD ============ -->
+  <div id="vista-admin">
+    <div class="fdt-login-wrap" id="login-wrap">
+      <div class="fdt-card">
+        <p class="fdt-section-title">Accesso riservato</p>
+        <div class="fdt-field">
+          <label class="fdt-label">Email</label>
+          <input id="login-email" class="fdt-input" type="email" placeholder="admin@esempio.com" autocomplete="username">
+        </div>
+        <div class="fdt-field">
+          <label class="fdt-label">Password</label>
+          <input id="login-pass" class="fdt-input" type="password" placeholder="••••••••" autocomplete="current-password">
+        </div>
+        <button class="fdt-btn" id="login-btn" onclick="doLogin()">
+          <i class="ti ti-lock-open"></i> Accedi
+        </button>
+        <p class="fdt-login-error" id="login-error"></p>
+      </div>
+    </div>
+
+    <div class="fdt-dash" id="dash">
+      <div class="fdt-toolbar">
+        <span class="fdt-badge" id="count-badge">0 ordini</span>
+        <div class="fdt-search">
+          <input type="text" id="search-input" placeholder="Cerca per nome, carta, espansione..." oninput="renderOrders()">
+        </div>
+      </div>
+      <div class="fdt-orders-wrap">
+        <div id="orders-list"><div class="fdt-loading">Caricamento ordini...</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fdt-lightbox" id="lightbox" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="" alt="Immagine riferimento">
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, deleteDoc, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { firebaseConfig } from "./firebase-config.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    /* ===================================================
+       NAVIGAZIONE TRA VISTA PUBBLICA E VISTA ADMIN
+       (accesso admin: 3 click sull'<h1> "Fai da Tela")
+    =================================================== */
+    const vistaPubblica = document.getElementById('vista-pubblica');
+    const vistaAdmin = document.getElementById('vista-admin');
+    const taglineEl = document.getElementById('tagline');
+    const backBtn = document.getElementById('back-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+
+    function mostraAdmin() {
+      vistaPubblica.style.display = 'none';
+      vistaAdmin.style.display = 'block';
+      taglineEl.textContent = 'pannello admin · ordini ricevuti';
+      backBtn.style.display = 'flex';
+    }
+
+    window.tornaAlForm = function () {
+      vistaAdmin.style.display = 'none';
+      vistaPubblica.style.display = 'block';
+      taglineEl.textContent = 'tattoo · custom art · richieste ordine';
+      backBtn.style.display = 'none';
+    };
+
+    // --- TRUCCO ACCESSO ADMIN (3 CLIC SUL TITOLO) ---
+    const titoloSegreto = document.getElementById('titolo-segreto');
+    let adminClickCount = 0;
+    let adminClickTimer = null;
+
+    if (titoloSegreto) {
+      titoloSegreto.addEventListener('click', () => {
+        adminClickCount++;
+
+        if (adminClickCount >= 3) {
+          adminClickCount = 0;
+          mostraAdmin();
+        }
+
+        clearTimeout(adminClickTimer);
+        adminClickTimer = setTimeout(() => {
+          adminClickCount = 0;
+        }, 1000);
+      });
+    }
+
+    /* ===================================================
+       VISTA PUBBLICA — FORM RICHIESTA ORDINE
+    =================================================== */
+    let imgData = null;
+
+    // Lunghezza massima del data-URL: deve restare sotto il limite della
+    // regola Firestore (720.000) e del documento (1MB). Teniamo margine.
+    const MAX_IMG_CHARS = 680000;
+    // Lato lungo massimo dell'immagine ridimensionata (px).
+    const MAX_DIMENSION = 1280;
+
+    window.handleImg = function (e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const preview = document.getElementById('img-preview');
+      const uploadText = document.querySelector('.fdt-upload-text');
+
+      if (!file.type.startsWith('image/')) {
+        alert("Il file selezionato non è un'immagine valida.");
+        e.target.value = '';
+        return;
+      }
+
+      // Cap di sicurezza solo per evitare crash di memoria su file enormi.
+      if (file.size > 25 * 1024 * 1024) {
+        alert("L'immagine è davvero troppo pesante (oltre 25MB). Scegline una più piccola.");
+        e.target.value = '';
+        return;
+      }
+
+      if (uploadText) uploadText.innerHTML = '<span>Ottimizzazione immagine…</span>';
+
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+
+      img.onload = function () {
+        URL.revokeObjectURL(url);
+
+        // Riduce le dimensioni mantenendo le proporzioni.
+        let { width, height } = img;
+        if (width > height && width > MAX_DIMENSION) {
+          height = Math.round(height * MAX_DIMENSION / width);
+          width = MAX_DIMENSION;
+        } else if (height >= width && height > MAX_DIMENSION) {
+          width = Math.round(width * MAX_DIMENSION / height);
+          height = MAX_DIMENSION;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        // Sfondo bianco: evita aree nere quando si converte un PNG trasparente in JPEG.
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Comprime in JPEG abbassando la qualità (e poi le dimensioni)
+        // finché il data-URL non sta sotto il limite.
+        let quality = 0.82;
+        let result = canvas.toDataURL('image/jpeg', quality);
+
+        while (result.length > MAX_IMG_CHARS && quality > 0.4) {
+          quality -= 0.1;
+          result = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        // Se ancora troppo grande, riduce ulteriormente le dimensioni.
+        let scale = 0.85;
+        while (result.length > MAX_IMG_CHARS && canvas.width > 400) {
+          canvas.width = Math.round(canvas.width * scale);
+          canvas.height = Math.round(canvas.height * scale);
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          result = canvas.toDataURL('image/jpeg', 0.7);
+        }
+
+        if (result.length > MAX_IMG_CHARS) {
+          alert("Non è stato possibile comprimere abbastanza l'immagine. Prova con una foto diversa.");
+          e.target.value = '';
+          if (uploadText) uploadText.innerHTML = '<span>Clicca per caricare</span> o trascina qui<br>PNG, JPG, WEBP';
+          return;
+        }
+
+        imgData = result;
+        preview.src = imgData;
+        preview.style.display = 'block';
+
+        const kb = Math.round(imgData.length / 1024);
+        if (uploadText) uploadText.innerHTML = `<span>Immagine pronta</span> (~${kb}KB) · clicca per cambiarla`;
+      };
+
+      img.onerror = function () {
+        URL.revokeObjectURL(url);
+        e.target.value = '';
+        if (uploadText) uploadText.innerHTML = '<span>Clicca per caricare</span> o trascina qui<br>PNG, JPG, WEBP';
+        alert("Impossibile leggere questa immagine. Se è una foto da iPhone (formato HEIC), salvala o esportala come JPG e riprova.");
+      };
+
+      img.src = url;
+    };
+
+    function setLoading(isLoading) {
+      const btn = document.getElementById('submit-btn');
+      document.getElementById('btn-spinner').style.display = isLoading ? 'inline-block' : 'none';
+      document.getElementById('btn-icon').style.display = isLoading ? 'none' : 'inline';
+      document.getElementById('btn-text').textContent = isLoading ? 'Invio in corso...' : 'Invia richiesta';
+      btn.disabled = isLoading;
+    }
+
+    window.submitOrder = async function () {
+      const nome = document.getElementById('f-nome').value.trim();
+      const carta = document.getElementById('f-carta').value.trim();
+      const espansione = document.getElementById('f-espansione').value.trim();
+
+      const fields = [
+        { id: 'f-nome', val: nome },
+        { id: 'f-carta', val: carta },
+        { id: 'f-espansione', val: espansione }
+      ];
+      let ok = true;
+      fields.forEach(f => {
+        const el = document.getElementById(f.id);
+        el.style.borderColor = f.val ? '#c4a882' : '#b84c1e';
+        if (!f.val) ok = false;
+      });
+      if (!ok) return;
+
+      document.getElementById('success-box').style.display = 'none';
+      document.getElementById('error-box').style.display = 'none';
+      setLoading(true);
+
+      const order = {
+        nome,
+        cognome: document.getElementById('f-cognome').value.trim(),
+        ig: document.getElementById('f-ig').value.trim(),
+        carta,
+        espansione,
+        note: document.getElementById('f-note').value.trim(),
+        img: imgData || null,
+        createdAt: serverTimestamp()
+      };
+
+      try {
+        await addDoc(collection(db, "ordini"), order);
+
+        ['f-nome', 'f-cognome', 'f-ig', 'f-carta', 'f-espansione', 'f-note'].forEach(id => {
+          document.getElementById(id).value = '';
+          document.getElementById(id).style.borderColor = '';
+        });
+        document.getElementById('f-img').value = '';
+        document.getElementById('img-preview').style.display = 'none';
+        imgData = null;
+        const uploadText = document.querySelector('.fdt-upload-text');
+        if (uploadText) uploadText.innerHTML = '<span>Clicca per caricare</span> o trascina qui<br>PNG, JPG, WEBP';
+
+        document.getElementById('success-box').style.display = 'block';
+        setTimeout(() => document.getElementById('success-box').style.display = 'none', 4000);
+      } catch (err) {
+        console.error("Errore invio ordine:", err);
+        document.getElementById('error-text').textContent =
+          'Non siamo riusciti a inviare la richiesta. Controlla la connessione e riprova.';
+        document.getElementById('error-box').style.display = 'block';
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    /* ===================================================
+       VISTA ADMIN — LOGIN + DASHBOARD ORDINI
+    =================================================== */
+    let allOrders = [];
+    let unsubscribe = null;
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login-wrap').style.display = 'none';
+        document.getElementById('dash').style.display = 'block';
+        logoutBtn.style.display = 'flex';
+        startListening();
+      } else {
+        document.getElementById('login-wrap').style.display = 'block';
+        document.getElementById('dash').style.display = 'none';
+        logoutBtn.style.display = 'none';
+        if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+      }
+    });
+
+    window.doLogin = async function () {
+      const email = document.getElementById('login-email').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      const errEl = document.getElementById('login-error');
+      const btn = document.getElementById('login-btn');
+      errEl.style.display = 'none';
+
+      if (!email || !pass) {
+        errEl.textContent = 'Inserisci email e password.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        document.getElementById('login-pass').value = '';
+      } catch (err) {
+        console.error(err);
+        errEl.textContent = 'Credenziali non valide. Riprova.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+      }
+    };
+
+    window.doLogout = async function () {
+      await signOut(auth);
+      window.tornaAlForm();
+    };
+
+    function startListening() {
+      const q = query(collection(db, "ordini"), orderBy("createdAt", "desc"));
+      unsubscribe = onSnapshot(q, (snapshot) => {
+        allOrders = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderOrders();
+      }, (err) => {
+        console.error("Errore lettura ordini:", err);
+        document.getElementById('orders-list').innerHTML =
+          '<div class="fdt-empty">Errore nel caricamento degli ordini.</div>';
+      });
+    }
+
+    function formatDate(ts) {
+      if (!ts) return '—';
+      try {
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+      } catch (e) { return '—'; }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+
+    // Sicurezza: accetta solo veri data-URL immagine, altrimenti scarta.
+    // Evita XSS persistente: il campo img arriva da un form pubblico
+    // e prima veniva interpolato grezzo dentro innerHTML.
+    function safeImgSrc(src) {
+      if (typeof src !== 'string') return '';
+      if (!/^data:image\/(png|jpe?g|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(src)) return '';
+      return src;
+    }
+
+    window.renderOrders = function () {
+      const term = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+      const filtered = !term ? allOrders : allOrders.filter(o => {
+        return [o.nome, o.cognome, o.carta, o.espansione, o.ig, o.note]
+          .filter(Boolean).join(' ').toLowerCase().includes(term);
+      });
+
+      document.getElementById('count-badge').textContent =
+        `${filtered.length} ordin${filtered.length === 1 ? 'e' : 'i'}` + (term ? ` (su ${allOrders.length})` : '');
+
+      const list = document.getElementById('orders-list');
+      if (!filtered.length) {
+        list.innerHTML = `<div class="fdt-empty">${allOrders.length ? 'Nessun risultato per la ricerca.' : 'Nessun ordine ricevuto ancora.'}</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(o => {
+        const imgSrc = safeImgSrc(o.img);
+        return `
+        <div class="fdt-order-item">
+          <div class="fdt-order-top">
+            <span class="fdt-order-name">${escapeHtml(o.nome)}${o.cognome ? ' ' + escapeHtml(o.cognome) : ''}</span>
+            <span class="fdt-order-time">${formatDate(o.createdAt)}</span>
+          </div>
+          <div class="fdt-order-grid">
+            <div class="fdt-order-card"><i class="ti ti-cards" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i>${escapeHtml(o.carta)}</div>
+            <div class="fdt-order-exp"><i class="ti ti-stack-2" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${escapeHtml(o.espansione)}</div>
+          </div>
+          ${o.ig ? `<div class="fdt-order-ig"><i class="ti ti-brand-instagram" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${escapeHtml(o.ig)}</div>` : ''}
+          ${o.note ? `<div class="fdt-order-note">"${escapeHtml(o.note)}"</div>` : ''}
+          ${imgSrc ? `<img src="${imgSrc}" class="fdt-order-img" alt="Riferimento" onclick="window.openLightbox('${escapeHtml(o.id)}')">` : ''}
+          <div class="fdt-order-actions">
+            <button class="fdt-del-btn" onclick="window.deleteOrder('${escapeHtml(o.id)}', this)"><i class="ti ti-trash"></i> Elimina</button>
+          </div>
+        </div>
+      `;
+      }).join('');
+    };
+
+    window.openLightbox = function (id) {
+      const order = allOrders.find(o => o.id === id);
+      if (!order) return;
+      const src = safeImgSrc(order.img);
+      if (!src) return;
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').style.display = 'flex';
+    };
+
+    window.deleteOrder = async function (id, btnEl) {
+      if (!confirm('Eliminare definitivamente questo ordine?')) return;
+      btnEl.disabled = true;
+      try {
+        await deleteDoc(doc(db, "ordini", id));
+      } catch (err) {
+        console.error("Errore eliminazione:", err);
+        alert('Impossibile eliminare l\'ordine. Riprova.');
+        btnEl.disabled = false;
+      }
+    };
+  </script>
+
+</body>
+</html>
