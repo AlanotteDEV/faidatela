@@ -1,0 +1,39 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /ordini/{ordineId} {
+
+      // CREATE — Form pubblico, nessun login richiesto
+      allow create: if request.resource.data.nome is string &&
+        request.resource.data.nome.size() > 0 &&
+        request.resource.data.nome.size() <= 100 &&
+        request.resource.data.carta is string &&
+        request.resource.data.carta.size() > 0 &&
+        request.resource.data.carta.size() <= 200 &&
+        request.resource.data.espansione is string &&
+        request.resource.data.espansione.size() > 0 &&
+        request.resource.data.espansione.size() <= 200 &&
+        (!('cognome' in request.resource.data) || (request.resource.data.cognome is string && request.resource.data.cognome.size() <= 100)) &&
+        (!('ig' in request.resource.data) || (request.resource.data.ig is string && request.resource.data.ig.size() <= 100)) &&
+        (!('note' in request.resource.data) || (request.resource.data.note is string && request.resource.data.note.size() <= 1000)) &&
+        // base64 di un file ~500KB ≈ 683.000 caratteri: teniamo margine
+        // sotto il limite duro di 1.048.576 byte per documento Firestore.
+        (request.resource.data.img == null || (request.resource.data.img is string && request.resource.data.img.size() <= 720000)) &&
+        request.resource.data.createdAt == request.time &&
+        request.resource.data.keys().hasOnly(['nome', 'cognome', 'ig', 'carta', 'espansione', 'note', 'img', 'createdAt']);
+
+      // READ & DELETE — Solo le email autorizzate possono accedere ai dati.
+      // ⚠️ Sostituisci "TUA-SECONDA-EMAIL@esempio.com" con l'email reale del
+      //    secondo admin, OPPURE rimuovi del tutto la riga se l'admin è uno solo.
+      allow read, delete: if request.auth != null && 
+        (request.auth.token.email == "alanotte6@gmail.com" || 
+         request.auth.token.email == "TUA-SECONDA-EMAIL@esempio.com");
+
+      // UPDATE — Sempre bloccato
+      allow update: if false;
+    }
+  }
+}
+
