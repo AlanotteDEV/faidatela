@@ -248,7 +248,7 @@
 <body>
 
   <div class="fdt-hero">
-    <h1 class="fdt-brand">Fai da Tela</h1>
+    <h1 class="fdt-brand" onclick="secretAdminAccess()" style="user-select: none;">Fai da Tela</h1>
     <p class="fdt-tagline">tattoo · custom art · richieste ordine</p>
     <div class="fdt-divider"></div>
   </div>
@@ -320,7 +320,6 @@
 
   <p class="fdt-footer-note">I tuoi dati vengono inviati in modo sicuro e sono visibili solo allo staff di Fai da Tela.</p>
 
-  <!-- Firebase SDK (versione modulare via CDN) -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
@@ -330,6 +329,24 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+
+    // --- TRUCCO ACCESSO ADMIN (3 CLIC) ---
+    let adminClickCount = 0;
+    let adminClickTimer = null;
+
+    window.secretAdminAccess = function() {
+      adminClickCount++;
+      
+      if (adminClickCount >= 3) {
+        window.location.href = 'admin.html'; 
+      }
+
+      clearTimeout(adminClickTimer);
+      adminClickTimer = setTimeout(() => {
+        adminClickCount = 0;
+      }, 1000); 
+    };
+    // --------------------------------------
 
     let imgData = null;
 
