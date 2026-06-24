@@ -348,7 +348,6 @@
     </button>
   </div>
 
-  <!-- LOGIN -->
   <div class="fdt-login-wrap" id="login-wrap">
     <div class="fdt-card">
       <p class="fdt-section-title">Accesso riservato</p>
@@ -367,7 +366,6 @@
     </div>
   </div>
 
-  <!-- DASHBOARD -->
   <div class="fdt-dash" id="dash">
     <div class="fdt-toolbar">
       <span class="fdt-badge" id="count-badge">0 ordini</span>
@@ -499,9 +497,9 @@
           </div>
           ${o.ig ? `<div class="fdt-order-ig"><i class="ti ti-brand-instagram" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${escapeHtml(o.ig)}</div>` : ''}
           ${o.note ? `<div class="fdt-order-note">"${escapeHtml(o.note)}"</div>` : ''}
-          ${o.img ? `<img src="${o.img}" class="fdt-order-img" alt="Riferimento" onclick="openLightbox('${o.id}')">` : ''}
+          ${o.img ? `<img src="${o.img}" class="fdt-order-img" alt="Riferimento" onclick="window.openLightbox('${o.id}')">` : ''}
           <div class="fdt-order-actions">
-            <button class="fdt-del-btn" onclick="deleteOrder('${o.id}', this)"><i class="ti ti-trash"></i> Elimina</button>
+            <button class="fdt-del-btn" onclick="window.deleteOrder('${o.id}', this)"><i class="ti ti-trash"></i> Elimina</button>
           </div>
         </div>
       `).join('');
