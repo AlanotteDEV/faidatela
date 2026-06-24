@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fai da Tela — Pannello Admin</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Nunito:wght@400;500;600&display=swap');
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #f0e8d8;
+      min-height: 100vh;
+      font-family: 'Nunito', sans-serif;
+      color: #2c1f10;
+      padding-bottom: 3rem;
+    }
+
+    .fdt-hero {
+      background: #e8dcc8;
+      border-bottom: 2px solid #c4a882;
+      padding: 2rem 1.5rem 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .fdt-brand {
+      font-family: 'Caveat', cursive;
+      font-size: 2.6rem;
+      font-weight: 700;
+      color: #1a1008;
+      letter-spacing: 0.04em;
+      line-height: 1;
+    }
+
+    .fdt-tagline {
+      font-family: 'Caveat', cursive;
+      font-size: 0.95rem;
+      color: #7a5c38;
+      margin: 0.3rem 0 0;
+      letter-spacing: 0.08em;
+    }
+
+    .fdt-divider {
+      width: 70px;
+      height: 2px;
+      background: #8b5e2a;
+      margin: 0.8rem auto 0;
+    }
+
+    .fdt-logout-btn {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      background: none;
+      border: 1.5px solid #c4a882;
+      color: #7a5c38;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.8rem;
+      padding: 5px 12px;
+      border-radius: 3px;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .fdt-logout-btn:hover { border-color: #8b5e2a; color: #5c3d1a; }
+
+    /* ---- LOGIN ---- */
+    .fdt-login-wrap {
+      max-width: 380px;
+      margin: 3rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .fdt-card {
+      background: #faf4e8;
+      border: 1.5px solid #c4a882;
+      border-radius: 4px;
+      padding: 1.75rem;
+      position: relative;
+    }
+
+    .fdt-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: #8b5e2a;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .fdt-section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      color: #7a5c38;
+      margin: 0 0 1.2rem;
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .fdt-field { margin-bottom: 1.1rem; }
+    .fdt-field:last-child { margin-bottom: 0; }
+
+    .fdt-label {
+      display: block;
+      font-family: 'Caveat', cursive;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #5c3d1a;
+      margin-bottom: 0.4rem;
+      letter-spacing: 0.06em;
+    }
+
+    .fdt-input {
+      width: 100%;
+      background: #fffdf5;
+      border: 1.5px solid #c4a882;
+      border-radius: 3px;
+      color: #1a1008;
+      font-size: 0.95rem;
+      font-family: 'Nunito', sans-serif;
+      padding: 0.6rem 0.85rem;
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .fdt-input:focus { border-color: #8b5e2a; }
+
+    .fdt-btn {
+      width: 100%;
+      background: #5c3d1a;
+      color: #faf4e8;
+      border: none;
+      border-radius: 3px;
+      font-family: 'Caveat', cursive;
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 0.7rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .fdt-btn:hover { background: #3d2810; }
+    .fdt-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .fdt-login-error {
+      display: none;
+      color: #b84c1e;
+      font-size: 0.82rem;
+      text-align: center;
+      margin-top: 0.8rem;
+    }
+
+    /* ---- DASHBOARD ---- */
+    .fdt-dash { display: none; }
+
+    .fdt-toolbar {
+      max-width: 800px;
+      margin: 1.5rem auto 0;
+      padding: 0 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .fdt-badge {
+      background: #5c3d1a;
+      color: #faf4e8;
+      font-family: 'Caveat', cursive;
+      font-size: 0.95rem;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 2px;
+    }
+
+    .fdt-search {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .fdt-search input {
+      width: 100%;
+      background: #fffdf5;
+      border: 1.5px solid #c4a882;
+      border-radius: 3px;
+      padding: 0.5rem 0.8rem;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      outline: none;
+    }
+    .fdt-search input:focus { border-color: #8b5e2a; }
+
+    .fdt-orders-wrap {
+      max-width: 800px;
+      margin: 1.2rem auto 0;
+      padding: 0 1.5rem;
+    }
+
+    .fdt-order-item {
+      background: #faf4e8;
+      border: 1.5px solid #c4a882;
+      border-left: 4px solid #8b5e2a;
+      border-radius: 0 4px 4px 0;
+      padding: 1.1rem 1.3rem;
+      margin-bottom: 0.9rem;
+    }
+
+    .fdt-order-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .fdt-order-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1a1008;
+    }
+
+    .fdt-order-time { font-size: 0.72rem; color: #a08060; white-space: nowrap; margin-top: 3px; }
+
+    .fdt-order-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.3rem 1rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .fdt-order-card {
+      font-family: 'Caveat', cursive;
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #5c3d1a;
+    }
+
+    .fdt-order-exp, .fdt-order-ig { font-size: 0.85rem; color: #7a5c38; }
+
+    .fdt-order-note {
+      font-family: 'Caveat', cursive;
+      font-size: 0.95rem;
+      color: #6e5436;
+      margin-top: 0.5rem;
+      border-top: 1px solid #d8c8a8;
+      padding-top: 0.4rem;
+    }
+
+    .fdt-order-img {
+      max-width: 130px;
+      max-height: 130px;
+      border-radius: 3px;
+      margin-top: 0.5rem;
+      border: 1.5px solid #c4a882;
+      cursor: zoom-in;
+      display: block;
+    }
+
+    .fdt-order-actions {
+      margin-top: 0.6rem;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .fdt-del-btn {
+      background: none;
+      border: 1.5px solid #c4a882;
+      color: #b84c1e;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.78rem;
+      padding: 4px 10px;
+      border-radius: 2px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .fdt-del-btn:hover { border-color: #b84c1e; background: #fdf0ea; }
+
+    .fdt-empty {
+      text-align: center;
+      color: #b8a080;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      padding: 2.5rem 0;
+      border: 1.5px dashed #c4a882;
+      border-radius: 4px;
+      background: #faf4e8;
+    }
+
+    .fdt-loading {
+      text-align: center;
+      color: #a08060;
+      font-family: 'Caveat', cursive;
+      font-size: 1.1rem;
+      padding: 2rem 0;
+    }
+
+    /* Lightbox immagine */
+    .fdt-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(20,12,4,0.85);
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      cursor: zoom-out;
+    }
+    .fdt-lightbox img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 4px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+    }
+
+    @media (max-width: 480px) {
+      .fdt-brand { font-size: 2.1rem; }
+      .fdt-order-grid { grid-template-columns: 1fr; }
+      .fdt-logout-btn { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="fdt-hero">
+    <h1 class="fdt-brand">Fai da Tela</h1>
+    <p class="fdt-tagline">pannello admin · ordini ricevuti</p>
+    <div class="fdt-divider"></div>
+    <button class="fdt-logout-btn" id="logout-btn" onclick="doLogout()">
+      <i class="ti ti-logout"></i> Esci
+    </button>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="fdt-login-wrap" id="login-wrap">
+    <div class="fdt-card">
+      <p class="fdt-section-title">Accesso riservato</p>
+      <div class="fdt-field">
+        <label class="fdt-label">Email</label>
+        <input id="login-email" class="fdt-input" type="email" placeholder="admin@esempio.com" autocomplete="username">
+      </div>
+      <div class="fdt-field">
+        <label class="fdt-label">Password</label>
+        <input id="login-pass" class="fdt-input" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="fdt-btn" id="login-btn" onclick="doLogin()">
+        <i class="ti ti-lock-open"></i> Accedi
+      </button>
+      <p class="fdt-login-error" id="login-error"></p>
+    </div>
+  </div>
+
+  <!-- DASHBOARD -->
+  <div class="fdt-dash" id="dash">
+    <div class="fdt-toolbar">
+      <span class="fdt-badge" id="count-badge">0 ordini</span>
+      <div class="fdt-search">
+        <input type="text" id="search-input" placeholder="Cerca per nome, carta, espansione..." oninput="renderOrders()">
+      </div>
+    </div>
+    <div class="fdt-orders-wrap">
+      <div id="orders-list"><div class="fdt-loading">Caricamento ordini...</div></div>
+    </div>
+  </div>
+
+  <div class="fdt-lightbox" id="lightbox" onclick="this.style.display='none'">
+    <img id="lightbox-img" src="" alt="Immagine riferimento">
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+      getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+      getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+    import { firebaseConfig } from "./firebase-config.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let allOrders = [];
+    let unsubscribe = null;
+
+    // --- AUTH STATE ---
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        document.getElementById('login-wrap').style.display = 'none';
+        document.getElementById('dash').style.display = 'block';
+        document.getElementById('logout-btn').style.display = 'flex';
+        startListening();
+      } else {
+        document.getElementById('login-wrap').style.display = 'block';
+        document.getElementById('dash').style.display = 'none';
+        document.getElementById('logout-btn').style.display = 'none';
+        if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+      }
+    });
+
+    window.doLogin = async function () {
+      const email = document.getElementById('login-email').value.trim();
+      const pass = document.getElementById('login-pass').value;
+      const errEl = document.getElementById('login-error');
+      const btn = document.getElementById('login-btn');
+      errEl.style.display = 'none';
+
+      if (!email || !pass) {
+        errEl.textContent = 'Inserisci email e password.';
+        errEl.style.display = 'block';
+        return;
+      }
+
+      btn.disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        document.getElementById('login-pass').value = '';
+      } catch (err) {
+        console.error(err);
+        errEl.textContent = 'Credenziali non valide. Riprova.';
+        errEl.style.display = 'block';
+      } finally {
+        btn.disabled = false;
+      }
+    };
+
+    window.doLogout = async function () {
+      await signOut(auth);
+    };
+
+    function startListening() {
+      const q = query(collection(db, "ordini"), orderBy("createdAt", "desc"));
+      unsubscribe = onSnapshot(q, (snapshot) => {
+        allOrders = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
+        renderOrders();
+      }, (err) => {
+        console.error("Errore lettura ordini:", err);
+        document.getElementById('orders-list').innerHTML =
+          '<div class="fdt-empty">Errore nel caricamento degli ordini.</div>';
+      });
+    }
+
+    function formatDate(ts) {
+      if (!ts) return '—';
+      try {
+        const d = ts.toDate ? ts.toDate() : new Date(ts);
+        return d.toLocaleString('it-IT', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit' });
+      } catch (e) { return '—'; }
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+    }
+
+    window.renderOrders = function () {
+      const term = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+      const filtered = !term ? allOrders : allOrders.filter(o => {
+        return [o.nome, o.cognome, o.carta, o.espansione, o.ig, o.note]
+          .filter(Boolean).join(' ').toLowerCase().includes(term);
+      });
+
+      document.getElementById('count-badge').textContent =
+        `${filtered.length} ordin${filtered.length === 1 ? 'e' : 'i'}` + (term ? ` (su ${allOrders.length})` : '');
+
+      const list = document.getElementById('orders-list');
+      if (!filtered.length) {
+        list.innerHTML = `<div class="fdt-empty">${allOrders.length ? 'Nessun risultato per la ricerca.' : 'Nessun ordine ricevuto ancora.'}</div>`;
+        return;
+      }
+
+      list.innerHTML = filtered.map(o => `
+        <div class="fdt-order-item">
+          <div class="fdt-order-top">
+            <span class="fdt-order-name">${escapeHtml(o.nome)}${o.cognome ? ' ' + escapeHtml(o.cognome) : ''}</span>
+            <span class="fdt-order-time">${formatDate(o.createdAt)}</span>
+          </div>
+          <div class="fdt-order-grid">
+            <div class="fdt-order-card"><i class="ti ti-cards" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i>${escapeHtml(o.carta)}</div>
+            <div class="fdt-order-exp"><i class="ti ti-stack-2" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${escapeHtml(o.espansione)}</div>
+          </div>
+          ${o.ig ? `<div class="fdt-order-ig"><i class="ti ti-brand-instagram" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>${escapeHtml(o.ig)}</div>` : ''}
+          ${o.note ? `<div class="fdt-order-note">"${escapeHtml(o.note)}"</div>` : ''}
+          ${o.img ? `<img src="${o.img}" class="fdt-order-img" alt="Riferimento" onclick="openLightbox('${o.id}')">` : ''}
+          <div class="fdt-order-actions">
+            <button class="fdt-del-btn" onclick="deleteOrder('${o.id}', this)"><i class="ti ti-trash"></i> Elimina</button>
+          </div>
+        </div>
+      `).join('');
+    };
+
+    window.openLightbox = function (id) {
+      const order = allOrders.find(o => o.id === id);
+      if (!order || !order.img) return;
+      document.getElementById('lightbox-img').src = order.img;
+      document.getElementById('lightbox').style.display = 'flex';
+    };
+
+    window.deleteOrder = async function (id, btnEl) {
+      if (!confirm('Eliminare definitivamente questo ordine?')) return;
+      btnEl.disabled = true;
+      try {
+        await deleteDoc(doc(db, "ordini", id));
+      } catch (err) {
+        console.error("Errore eliminazione:", err);
+        alert('Impossibile eliminare l\'ordine. Riprova.');
+        btnEl.disabled = false;
+      }
+    };
+  </script>
+
+</body>
+</html>

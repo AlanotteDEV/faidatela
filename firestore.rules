@@ -1,0 +1,93 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    match /ordini/{ordineId} {
+
+      // ============================================================
+      // CREATE — form pubblico (index.html), nessun login richiesto.
+      // Validiamo il contenuto per evitare dati spazzatura, campi
+      // extra, o payload troppo pesanti (oltre a quello che il
+      // client controlla già lato JS, che da solo non basta:
+      // un utente può sempre chiamare l'API Firestore direttamente).
+      // ============================================================
+      allow create: if
+        // --- Campi richiesti dal form ---
+        request.resource.data.nome is string &&
+        request.resource.data.nome.size() > 0 &&
+        request.resource.data.nome.size() <= 100 &&
+
+        request.resource.data.carta is string &&
+        request.resource.data.carta.size() > 0 &&
+        request.resource.data.carta.size() <= 200 &&
+
+        request.resource.data.espansione is string &&
+        request.resource.data.espansione.size() > 0 &&
+        request.resource.data.espansione.size() <= 200 &&
+
+        // --- Campi opzionali: se presenti devono essere stringhe
+        //     entro un limite ragionevole; se assenti vanno bene ---
+        (!('cognome' in request.resource.data) ||
+          (request.resource.data.cognome is string &&
+           request.resource.data.cognome.size() <= 100)) &&
+
+        (!('ig' in request.resource.data) ||
+          (request.resource.data.ig is string &&
+           request.resource.data.ig.size() <= 100)) &&
+
+        (!('note' in request.resource.data) ||
+          (request.resource.data.note is string &&
+           request.resource.data.note.size() <= 1000)) &&
+
+        // --- Immagine: stringa base64 (data URL) oppure null.
+        //     Il client limita già a ~700KB, qui mettiamo un tetto
+        //     a 1.5 milioni di caratteri come ulteriore sicurezza
+        //     (un documento Firestore non può superare 1MB totale,
+        //     quindi questo è già garantito a livello di sistema,
+        //     ma lo rendiamo esplicito) ---
+        (request.resource.data.img == null ||
+          (request.resource.data.img is string &&
+           request.resource.data.img.size() <= 1500000)) &&
+
+        // --- Timestamp: deve essere generato dal server, non dal
+        //     client, per evitare che qualcuno falsifichi la data ---
+        request.resource.data.createdAt == request.time &&
+
+        // --- Nessun campo extra non previsto ---
+        request.resource.data.keys().hasOnly(
+          ['nome', 'cognome', 'ig', 'carta', 'espansione', 'note', 'img', 'createdAt']
+        );
+
+      // ============================================================
+      // READ — solo lo staff loggato nel pannello admin può vedere
+      // la lista ordini.
+      // ============================================================
+      allow read: if request.auth != null;
+
+      // ============================================================
+      // DELETE — solo lo staff loggato può eliminare un ordine
+      // (è l'unica operazione che admin.html esegue oltre alla
+      // lettura).
+      // ============================================================
+      allow delete: if request.auth != null;
+
+      // ============================================================
+      // UPDATE — il pannello admin attuale non modifica mai un
+      // ordine esistente, quindi lo blocchiamo del tutto.
+      // Se in futuro vuoi aggiungere ad esempio uno stato
+      // "evaso/da evadere", cambia questa riga in:
+      //   allow update: if request.auth != null;
+      // ============================================================
+      allow update: if false;
+    }
+
+    // ============================================================
+    // Qualsiasi altra collection non esplicitamente definita sopra
+    // è bloccata di default (negazione implicita): non serve una
+    // regola "catch-all", Firestore nega tutto ciò che non è
+    // espressamente consentito da un match. Questo blocco è solo
+    // per chiarezza/documentazione.
+    // ============================================================
+  }
+}
