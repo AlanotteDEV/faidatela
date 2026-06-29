@@ -1,0 +1,8 @@
+# Installer
+*.exe
+
+# Zip temporanei
+files.zip
+
+# Screenshot
+Screenshot*.png
