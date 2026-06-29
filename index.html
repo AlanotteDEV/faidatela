@@ -11,7 +11,15 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #f0e8d8;
+      background-color: #f0e8d8;
+      background-image:
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 27px,
+          rgba(139,94,42,0.04) 27px,
+          rgba(139,94,42,0.04) 28px
+        );
       min-height: 100vh;
       font-family: 'Nunito', sans-serif;
       color: #2c1f10;
@@ -20,33 +28,42 @@
 
     /* ============ HERO / HEADER (comune) ============ */
     .fdt-hero {
-      background: #e8dcc8;
-      border-bottom: 2px solid #c4a882;
-      padding: 2.5rem 1.5rem 2rem;
+      background: #1a1008;
+      border-bottom: 3px solid #8b5e2a;
+      padding: 1.5rem 1.5rem 2rem;
       text-align: center;
       position: relative;
     }
 
+    .fdt-logo {
+      width: 110px;
+      height: auto;
+      display: block;
+      margin: 0 auto 0.6rem;
+      filter: drop-shadow(0 3px 10px rgba(0,0,0,0.4));
+    }
+
     .fdt-brand {
       font-family: 'Caveat', cursive;
-      font-size: 3.2rem;
+      font-size: 3rem;
       font-weight: 700;
-      color: #1a1008;
+      color: #f5eedf;
       letter-spacing: 0.04em;
       line-height: 1;
       user-select: none;
+      text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
     }
 
     .fdt-tagline {
       font-family: 'Caveat', cursive;
       font-size: 1rem;
-      color: #7a5c38;
+      color: #c4a882;
       margin: 0.3rem 0 0;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.1em;
     }
 
     .fdt-divider {
-      width: 80px;
+      width: 60px;
       height: 2px;
       background: #8b5e2a;
       margin: 1rem auto 0;
@@ -57,38 +74,38 @@
       top: 1.2rem;
       right: 1.2rem;
       background: none;
-      border: 1.5px solid #c4a882;
-      color: #7a5c38;
+      border: 1.5px solid #8b5e2a;
+      color: #c4a882;
       font-family: 'Nunito', sans-serif;
       font-size: 0.8rem;
       padding: 5px 12px;
-      border-radius: 3px;
+      border-radius: 2px;
       cursor: pointer;
       display: none;
       align-items: center;
       gap: 5px;
     }
 
-    .fdt-logout-btn:hover { border-color: #8b5e2a; color: #5c3d1a; }
+    .fdt-logout-btn:hover { border-color: #c4a882; color: #f5eedf; }
 
     .fdt-back-btn {
       position: absolute;
       top: 1.2rem;
       left: 1.2rem;
       background: none;
-      border: 1.5px solid #c4a882;
-      color: #7a5c38;
+      border: 1.5px solid #8b5e2a;
+      color: #c4a882;
       font-family: 'Nunito', sans-serif;
       font-size: 0.8rem;
       padding: 5px 12px;
-      border-radius: 3px;
+      border-radius: 2px;
       cursor: pointer;
       display: none;
       align-items: center;
       gap: 5px;
     }
 
-    .fdt-back-btn:hover { border-color: #8b5e2a; color: #5c3d1a; }
+    .fdt-back-btn:hover { border-color: #c4a882; color: #f5eedf; }
 
     /* ============ SECTION TITLES / CARDS (comune) ============ */
     .fdt-section-title {
@@ -96,27 +113,25 @@
       font-size: 1.05rem;
       font-weight: 600;
       letter-spacing: 0.12em;
-      color: #7a5c38;
+      color: #8b5e2a;
       margin: 0 0 1.2rem;
       text-transform: uppercase;
+      padding-bottom: 0.4rem;
+      border-bottom: 1.5px solid #c4a882;
     }
 
     .fdt-card {
       background: #faf4e8;
-      border: 1.5px solid #c4a882;
-      border-radius: 4px;
+      border: 2px solid #2c1f10;
+      border-radius: 2px;
       padding: 1.5rem;
-      margin-bottom: 1.25rem;
+      margin-bottom: 1.5rem;
       position: relative;
+      box-shadow: 5px 5px 0 #8b5e2a;
     }
 
     .fdt-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: #8b5e2a;
-      border-radius: 4px 4px 0 0;
+      display: none;
     }
 
     .fdt-field { margin-bottom: 1.2rem; }
@@ -137,17 +152,17 @@
     .fdt-input {
       width: 100%;
       background: #fffdf5;
-      border: 1.5px solid #c4a882;
-      border-radius: 3px;
+      border: 1.5px solid #2c1f10;
+      border-radius: 1px;
       color: #1a1008;
       font-size: 0.95rem;
       font-family: 'Nunito', sans-serif;
       padding: 0.6rem 0.85rem;
-      transition: border-color 0.2s;
+      transition: border-color 0.2s, box-shadow 0.2s;
       outline: none;
     }
 
-    .fdt-input:focus { border-color: #8b5e2a; }
+    .fdt-input:focus { border-color: #8b5e2a; box-shadow: 2px 2px 0 #c4a882; }
     .fdt-input::placeholder { color: #b8a080; }
 
     textarea.fdt-input {
@@ -163,27 +178,28 @@
 
     .fdt-btn {
       width: 100%;
-      background: #5c3d1a;
-      color: #faf4e8;
-      border: none;
-      border-radius: 3px;
+      background: #1a1008;
+      color: #f5eedf;
+      border: 2px solid #1a1008;
+      border-radius: 2px;
       font-family: 'Caveat', cursive;
       font-size: 1.3rem;
       font-weight: 700;
-      letter-spacing: 0.1em;
-      padding: 0.75rem;
+      letter-spacing: 0.12em;
+      padding: 0.8rem;
       cursor: pointer;
-      transition: background 0.2s, transform 0.1s;
+      transition: transform 0.1s, box-shadow 0.1s;
       margin-top: 0.5rem;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
+      box-shadow: 5px 5px 0 #8b5e2a;
     }
 
-    .fdt-btn:hover { background: #3d2810; }
-    .fdt-btn:active { transform: scale(0.99); }
-    .fdt-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .fdt-btn:hover { background: #2c1f10; transform: translate(2px, 2px); box-shadow: 3px 3px 0 #8b5e2a; }
+    .fdt-btn:active { transform: translate(4px, 4px); box-shadow: 1px 1px 0 #8b5e2a; }
+    .fdt-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: 5px 5px 0 #8b5e2a; }
 
     /* ============ VISTA PUBBLICA (form ordine) ============ */
     .fdt-form-wrap {
@@ -193,12 +209,12 @@
     }
 
     .fdt-upload-area {
-      border: 2px dashed #c4a882;
-      border-radius: 4px;
+      border: 2px dashed #2c1f10;
+      border-radius: 2px;
       padding: 1.5rem;
       text-align: center;
       cursor: pointer;
-      transition: border-color 0.2s, background 0.2s;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
       background: #fffdf5;
       position: relative;
     }
@@ -206,6 +222,7 @@
     .fdt-upload-area:hover {
       border-color: #8b5e2a;
       background: #faf4e8;
+      box-shadow: 3px 3px 0 #c4a882;
     }
 
     .fdt-upload-area input[type=file] {
@@ -311,13 +328,15 @@
     }
 
     .fdt-badge {
-      background: #5c3d1a;
-      color: #faf4e8;
+      background: #1a1008;
+      color: #f5eedf;
       font-family: 'Caveat', cursive;
       font-size: 0.95rem;
       font-weight: 700;
       padding: 3px 12px;
       border-radius: 2px;
+      border: 1.5px solid #8b5e2a;
+      box-shadow: 2px 2px 0 #8b5e2a;
     }
 
     .fdt-search {
@@ -345,11 +364,12 @@
 
     .fdt-order-item {
       background: #faf4e8;
-      border: 1.5px solid #c4a882;
-      border-left: 4px solid #8b5e2a;
-      border-radius: 0 4px 4px 0;
+      border: 2px solid #2c1f10;
+      border-left: 5px solid #8b5e2a;
+      border-radius: 0 2px 2px 0;
       padding: 1.1rem 1.3rem;
-      margin-bottom: 0.9rem;
+      margin-bottom: 1rem;
+      box-shadow: 3px 3px 0 #c4a882;
     }
 
     .fdt-order-top {
@@ -477,6 +497,7 @@
 <body>
 
   <div class="fdt-hero">
+    <img src="image1.png" class="fdt-logo" alt="Fai da Tela logo">
     <h1 class="fdt-brand" id="titolo-segreto" style="cursor: default;">Fai da Tela</h1>
     <p class="fdt-tagline" id="tagline">tattoo · custom art · richieste ordine</p>
     <div class="fdt-divider"></div>
@@ -972,3 +993,4 @@
 
 </body>
 </html>
+
